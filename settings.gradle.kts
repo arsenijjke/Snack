@@ -24,3 +24,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "Snack"
 include(":app")
+include(":data")
+include(":domain")
+include(":feature:home")
