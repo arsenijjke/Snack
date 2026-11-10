@@ -10,5 +10,5 @@ class GetRandomMealUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(): Result<Meal> =
-        repository.getRandomDish()
+        repository.getRandomMeal()
 }

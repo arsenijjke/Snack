@@ -7,7 +7,5 @@ sealed interface Result<out T> {
 
     data class Failure(
         val error: Throwable
-    ) : Result<Nothing> {
-
-    }
+    ) : Result<Nothing>
 }

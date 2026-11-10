@@ -31,10 +31,10 @@ class MealMapper {
         )
         return Meal(
             id = idMeal,
-            name = strMeal.blankToNull(),
-            category = strCategory.blankToNull(),
+            name = strMeal,
+            category = strCategory,
             area = strArea.blankToNull(),
-            country = strCountry.blankToNull(),
+            country = strCountry,
             instructions = strInstructions,
             thumbnail = strMealThumb,
             tags = strTags?.split(',')?.filter { it.isNotBlank() } ?: emptyList(),

@@ -1,6 +1,5 @@
 package app.arsenijjke.data.remote.repository
 
-import android.util.Log
 import app.arsenijjke.data.remote.api.MealApiService
 import app.arsenijjke.data.remote.mapper.MealMapper
 import app.arsenijjke.domain.model.Meal
@@ -12,7 +11,7 @@ class MealRepositoryImpl @Inject constructor(
     private val api: MealApiService,
 ) : MealRepository {
 
-    override suspend fun getRandomDish(): Result<Meal> {
+    override suspend fun getRandomMeal(): Result<Meal> {
         val mapper = MealMapper()
         return runCatching { api.getRandomMeal().meals.first() }
             .fold(
