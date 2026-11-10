@@ -14,10 +14,9 @@ class MealRepositoryImpl @Inject constructor(
 
     override suspend fun getRandomDish(): Result<Meal> {
         val mapper = MealMapper()
-        return runCatching { api.getRandomMeal() }
+        return runCatching { api.getRandomMeal().meals.first() }
             .fold(
                 onSuccess = { dto ->
-                    Log.d("DATA", dto.strMeal)
                     Result.Success(with(mapper) { dto.toDomain() })
                 },
                 onFailure = { throwable ->

@@ -41,6 +41,7 @@ android {
 dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
+    implementation(project(":feature:home"))
 
     implementation(libs.javax.inject)
 
@@ -60,6 +61,9 @@ dependencies {
 
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson.converter)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
+
     implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))

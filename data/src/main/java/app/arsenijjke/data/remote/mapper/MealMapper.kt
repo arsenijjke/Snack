@@ -31,18 +31,25 @@ class MealMapper {
         )
         return Meal(
             id = idMeal,
-            name = strMeal,
-            category = strCategory.takeIf { it.isNotBlank() },
-            area = strArea?.takeIf { it.isNotBlank() },
-            country = strCountry.takeIf { it.isNotBlank() },
+            name = strMeal.blankToNull(),
+            category = strCategory.blankToNull(),
+            area = strArea.blankToNull(),
+            country = strCountry.blankToNull(),
             instructions = strInstructions,
             thumbnail = strMealThumb,
             tags = strTags?.split(',')?.filter { it.isNotBlank() } ?: emptyList(),
-            youtube = strYoutube.takeIf { it.isNotBlank() },
-            source = strSource.takeIf { it.isNotBlank() },
+            youtube = strYoutube.blankToNull(),
+            source = strSource.blankToNull(),
             ingredients = rawIngredients
-                .filter { (name, _) -> name.isNotBlank() }
-                .map { (name, measure) -> Ingredient(name.trim(), measure.trim())}
+                .filter { (name, _) -> !name.isNullOrBlank() }
+                .map { (name, measure) ->
+                    Ingredient(
+                        name = name!!.trim(),
+                        measure = measure?.trim().orEmpty(),
+                    )
+                },
         )
     }
 }
+
+private fun String?.blankToNull(): String? = this?.takeIf { it.isNotBlank() }
