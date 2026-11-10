@@ -19,7 +19,6 @@ import app.arsenijjke.home.HomeViewModel
 import app.arsenijjke.snack.ui.theme.SnackTheme
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -28,9 +27,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SnackTheme {
-                val vm: HomeViewModel = hiltViewModel()
-                val res = vm.state.collectAsStateWithLifecycle()
-                HomeScreen(text = res.value)
+                Scaffold { innerPadding ->
+                    val vm: HomeViewModel = hiltViewModel()
+                    HomeScreen(
+                        modifier = Modifier.padding(innerPadding),
+                        viewModel = vm
+                    )
+                }
+
             }
         }
     }
