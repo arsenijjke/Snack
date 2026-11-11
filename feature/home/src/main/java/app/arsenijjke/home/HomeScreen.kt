@@ -1,18 +1,51 @@
 package app.arsenijjke.home
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.isTraversalGroup
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
@@ -22,55 +55,342 @@ fun HomeScreen(
 ) {
     val state: HomeViewModel.MealUiState by viewModel.state.collectAsStateWithLifecycle()
     HomeScreen(
-        state = state
+        //state = state
     )
 }
 
 @Composable
 internal fun HomeScreen(
     modifier: Modifier = Modifier,
-    state: HomeViewModel.MealUiState,
+    //state: HomeViewModel.MealUiState,
 ) {
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(top = 48.dp)
+    ) {
+        HomeHeader(
+            modifier = Modifier.padding(horizontal = 24.dp),
+            timeOfTheDay = "Good Evening",
+            name = "Arseny"
+        )
+
+        SimpleSearchBar(
+            textFieldState = TextFieldState(initialText = "null"),
+            onSearch = {},
+            searchResults = emptyList(),
+            modifier = Modifier.padding(horizontal = 24.dp)
+        )
+
+        MealOfTheDay(modifier = Modifier.padding(horizontal = 24.dp))
+
+        Spacer(modifier = Modifier.size(44.dp))
+
+        CategoriesList(modifier = Modifier.padding(horizontal = 24.dp))
+    }
 
 }
 
 @Composable
-internal fun Home(
+fun HomeHeader(
     modifier: Modifier = Modifier,
+    timeOfTheDay: String,
+    name: String,
 ) {
-    Box(
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        TimeAndName(
+            modifier = Modifier.weight(1f),
+            timeOfTheDay = timeOfTheDay,
+            name = name
+        )
+        UserAvatar()
+    }
+}
+
+@Composable
+private fun TimeAndName(
+    modifier: Modifier = Modifier,
+    timeOfTheDay: String,
+    name: String,
+) {
+    Column(
         modifier = modifier
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                TimeAndName(
-                    timeOfTheDay = "",
-                    name = "",
-                )
+        Text(timeOfTheDay)
+        Spacer(Modifier.size(4.dp))
+        Text(name)
+    }
+}
 
+@Composable
+private fun UserAvatar() {
+    Box(
+        modifier = Modifier
+            .size(40.dp)
+            .clip(CircleShape)
+            .background(Color.Cyan)
+    )
+}
+
+@Composable
+fun MealOfTheDay(
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+    ) {
+        MealHeader()
+        MealCard()
+    }
+}
+
+@Composable
+private fun MealHeader() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(text = "Recipe of the day")
+        Text(text = "View all")
+    }
+}
+
+@Composable
+fun MealCard(
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(300.dp),
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.img),
+                contentScale = ContentScale.Crop,
+                contentDescription = null,
+                modifier = Modifier.matchParentSize()
+            )
+
+            //TODO("Add Blur or smth Haze")
+            IconButton(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(16.dp),
+                onClick = {}
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.baseline_favorite_border_24),
+                    contentDescription = null,
+                )
             }
+
+            MealCardContent(
+                modifier = Modifier
+                    .fillMaxHeight(0.5f)
+                    .fillMaxWidth()
+                    .align(Alignment.BottomStart)
+                    .padding(start = 24.dp, bottom = 24.dp)
+            )
+
         }
     }
 }
 
 @Composable
-internal fun TimeAndName(
-    timeOfTheDay: String,
-    name: String,
+fun TypeOfMealChip(
+    modifier: Modifier = Modifier,
 ) {
-    Column {
-        Text(timeOfTheDay)
-        Spacer(Modifier.padding(vertical = 10.dp))
-        Text(name)
+    Box(
+        modifier = modifier
+            .clip(shape = RoundedCornerShape(20.dp))
+            .background(Color.Red),
+    ) {
+        Text(
+            modifier = Modifier
+                .padding(horizontal = 10.dp, vertical = 6.dp),
+            text = "DINNER",
+            fontSize = 10.sp,
+        )
     }
 }
 
-@Preview
 @Composable
-internal fun HomeScreenPreview() {
+fun TimeToCookChip(
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .clip(shape = RoundedCornerShape(20.dp))
+            .background(Color.Red),
+    ) {
+        Text(
+            modifier = Modifier
+                .padding(horizontal = 10.dp, vertical = 6.dp),
+            text = "DINNER",
+            fontSize = 10.sp,
+        )
+    }
+}
 
+@Composable
+fun MealCardContent(
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.Start,
+        ) {
+            TypeOfMealChip()
+            Spacer(Modifier.size(12.dp))
+            TimeToCookChip()
+        }
+        Spacer(Modifier.size(24.dp))
+        MealTitle()
+        Spacer(Modifier.size(12.dp))
+        MealDescription()
+    }
+}
+
+@Composable
+private fun MealTitle() {
+    Text(text = "Rustic Tuscan Tomato Basil Pasta")
+}
+
+@Composable
+private fun MealDescription() {
+    Text(text = "A simple, soul-warming classic with fresh herbs.")
+}
+
+@Composable
+private fun CategoriesList(
+    modifier: Modifier = Modifier
+) {
+    Text(
+        modifier = modifier,
+        text = "Categories"
+    )
+    Spacer(modifier = Modifier.size(20.dp))
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(24.dp)
+    ) {
+        //TODO("Receive here: https://www.themealdb.com/api/json/v1/1/categories.php")
+        items(count = 10) {
+            CategoryItem()
+        }
+    }
+}
+
+@Composable
+private fun CategoryItem(
+    modifier: Modifier = Modifier
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = modifier
+                .size(72.dp)
+                .shadow(3.dp, RoundedCornerShape(20.dp))
+                .clip(RoundedCornerShape(20.dp))
+                .background(Color.Cyan)
+
+        ) {
+            Icon(
+                modifier = Modifier.align(Alignment.Center),
+                painter = painterResource(id = R.drawable.baseline_favorite_border_24),
+                contentDescription = null
+            )
+        }
+
+        Spacer(modifier = Modifier.size(14.dp))
+
+        Text(text = "Beef")
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SimpleSearchBar(
+    textFieldState: TextFieldState,
+    onSearch: (String) -> Unit,
+    searchResults: List<String>,
+    modifier: Modifier = Modifier
+) {
+    // Controls expansion state of the search bar
+    var expanded by rememberSaveable { mutableStateOf(false) }
+
+    Box(
+        modifier
+            .fillMaxWidth()
+            .height(100.dp)
+            .semantics { isTraversalGroup = true }
+    ) {
+        SearchBar(
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .semantics { traversalIndex = 0f },
+            inputField = {
+                SearchBarDefaults.InputField(
+                    query = textFieldState.text.toString(),
+                    onQueryChange = { textFieldState.edit { replace(0, length, it) } },
+                    onSearch = {
+                        onSearch(textFieldState.text.toString())
+                        expanded = false
+                    },
+                    expanded = expanded,
+                    onExpandedChange = { expanded = it },
+                    placeholder = { Text("Search") }
+                )
+            },
+            expanded = expanded,
+            onExpandedChange = { expanded = it },
+        ) {
+            // Display search results in a scrollable column
+            Column(Modifier.verticalScroll(rememberScrollState())) {
+                searchResults.forEach { result ->
+                    ListItem(
+                        headlineContent = { Text(result) },
+                        modifier = Modifier
+                            .clickable {
+                                textFieldState.edit { replace(0, length, result) }
+                                expanded = false
+                            }
+                            .fillMaxWidth()
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Preview(
+    showBackground = true
+)
+@Composable
+fun HomeScreenPreview() {
+    HomeScreen(
+
+    )
+}
+
+@Preview(
+    showBackground = true
+)
+@Composable
+fun CategoryItemPreview() {
+    CategoryItem()
 }
