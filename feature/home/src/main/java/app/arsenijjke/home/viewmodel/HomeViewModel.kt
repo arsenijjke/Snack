@@ -3,6 +3,7 @@ package app.arsenijjke.home.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.arsenijjke.domain.usecase.GetRandomMealUseCase
+import app.arsenijjke.domain.usecase.GetTimeOfDayUseCase
 import app.arsenijjke.domain.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getRandomMealUseCase: GetRandomMealUseCase
+    private val getRandomMealUseCase: GetRandomMealUseCase,
+    private val getTimeOfDayUseCase: GetTimeOfDayUseCase
 ) : ViewModel() {
 
     val state: StateFlow<MealUiState> = mealUiState()
@@ -28,9 +30,10 @@ class HomeViewModel @Inject constructor(
     private fun mealUiState(): Flow<MealUiState> =
         flow { emit(getRandomMealUseCase()) }
             .map { result ->
+                val greeting = getTimeOfDayUseCase()
                 when (result) {
                     is Result.Success -> MealUiState.Success(
-                        result.value.toUiModel()
+                        result.value.toUiModel(greeting = greeting)
                     )
                     is Result.Failure -> MealUiState.Error
                     is Result.Loading -> MealUiState.Loading

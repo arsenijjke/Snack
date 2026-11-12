@@ -88,8 +88,7 @@ internal fun HomeScreen(
                 )*/
                 HomeHeader(
                     modifier = Modifier.padding(horizontal = 24.dp),
-                    timeOfTheDay = "Good evening",
-                    name = state.meal.username
+                    state
                 )
 
                 MealOfTheDay(
@@ -118,8 +117,7 @@ internal fun HomeScreen(
 @Composable
 fun HomeHeader(
     modifier: Modifier = Modifier,
-    timeOfTheDay: String,
-    name: String,
+    state: HomeViewModel.MealUiState.Success
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -131,13 +129,13 @@ fun HomeHeader(
             horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = timeOfTheDay,
+                text = "Good " + state.meal.greeting + ",",
                 style = MaterialTheme.typography.bodySmall,
                 color = Color.Gray,
             )
             Text(
-                text = name,
-                style = MaterialTheme.typography.bodyLarge,
+                text = state.meal.username,
+                style = MaterialTheme.typography.bodyMedium,
             )
         }
 
@@ -456,7 +454,8 @@ fun HomeScreenPreview() {
                 isFavourite = false,
                 categories = emptyList(),
                 id = "123",
-                timeToCook = "30 min"
+                timeToCook = "30 min",
+                greeting = "Evening"
             )
         )
     )

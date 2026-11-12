@@ -14,11 +14,13 @@ data class MealUiModel(
     val isFavourite: Boolean = false,
     val categories: List<String>,
     val timeToCook: String,
+    val greeting: String,
 )
 
 fun Meal.toUiModel(
     username: String = "Username",
     isFavourite: Boolean = false,
+    greeting: String
 ): MealUiModel {
     return MealUiModel(
         id = id,
@@ -31,7 +33,8 @@ fun Meal.toUiModel(
         typeOfMeal = category,
         isFavourite = isFavourite,
         categories = tags,
-        timeToCook = randomCookTime()
+        timeToCook = randomCookTime(),
+        greeting = greeting,
     )
 }
 
@@ -54,6 +57,6 @@ private fun randomCookTime(): String {
 }
 
 object TimeConstants {
-    const val MIN_TIME_STEPS = 30
-    const val MAX_TIME_STEPS = 30
+    const val MIN_TIME_STEPS = 3
+    const val MAX_TIME_STEPS = 13
 }
