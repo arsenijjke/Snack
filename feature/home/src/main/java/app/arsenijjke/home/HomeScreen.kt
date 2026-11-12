@@ -25,6 +25,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
@@ -35,6 +36,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -43,6 +45,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -76,12 +79,12 @@ internal fun HomeScreen(
             name = "Arseny"
         )
 
-        SimpleSearchBar(
+        /*SimpleSearchBar(
             textFieldState = TextFieldState(initialText = "null"),
             onSearch = {},
             searchResults = emptyList(),
             modifier = Modifier.padding(horizontal = 24.dp)
-        )
+        )*/
 
         MealOfTheDay(modifier = Modifier.padding(horizontal = 24.dp))
 
@@ -121,9 +124,15 @@ private fun TimeAndName(
     Column(
         modifier = modifier
     ) {
-        Text(timeOfTheDay)
-        Spacer(Modifier.size(4.dp))
-        Text(name)
+        Text(
+            text = timeOfTheDay,
+            style = MaterialTheme.typography.bodySmall,
+            color = Color.Gray,
+        )
+        Text(
+            text = name,
+            style = MaterialTheme.typography.bodyLarge,
+        )
     }
 }
 
@@ -156,8 +165,16 @@ private fun MealHeader() {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = "Recipe of the day")
-        Text(text = "View all")
+        Text(
+            text = "Recipe of the day",
+            style = MaterialTheme.typography.titleLarge,
+            color = Color(45, 43, 42),
+        )
+        Text(
+            text = "View all",
+            style = MaterialTheme.typography.labelLarge,
+            color = Color(216, 89, 63),
+        )
     }
 }
 
@@ -168,7 +185,7 @@ fun MealCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(300.dp),
+            .height(354.dp),
     ) {
         Box(
             modifier = Modifier
@@ -200,7 +217,7 @@ fun MealCard(
                     .fillMaxHeight(0.5f)
                     .fillMaxWidth()
                     .align(Alignment.BottomStart)
-                    .padding(start = 24.dp, bottom = 24.dp)
+                    .padding(start = 24.dp, top = 24.dp)
             )
 
         }
@@ -220,7 +237,10 @@ fun TypeOfMealChip(
             modifier = Modifier
                 .padding(horizontal = 10.dp, vertical = 6.dp),
             text = "DINNER",
+            color = Color.White,
             fontSize = 10.sp,
+            letterSpacing = 1.sp,
+            fontWeight = FontWeight.Bold,
         )
     }
 }
@@ -232,14 +252,28 @@ fun TimeToCookChip(
     Box(
         modifier = modifier
             .clip(shape = RoundedCornerShape(20.dp))
-            .background(Color.Red),
+            .background(Color.Black.copy(alpha = 0.2f)),
     ) {
-        Text(
-            modifier = Modifier
-                .padding(horizontal = 10.dp, vertical = 6.dp),
-            text = "DINNER",
-            fontSize = 10.sp,
-        )
+
+        Row(
+            modifier = Modifier.padding(start = 8.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.baseline_access_time_24),
+                tint = Color.White.copy(0.9f),
+                contentDescription = null
+            )
+            Text(
+                modifier = Modifier
+                    .padding(horizontal = 6.dp, vertical = 6.dp)
+                    .alpha(0.9f),
+                text = "35 min",
+                style = MaterialTheme.typography.labelMedium,
+                color = Color.White,
+            )
+        }
     }
 }
 
@@ -248,30 +282,39 @@ fun MealCardContent(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier
+        modifier = modifier.padding(end = 30.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Row(
-            horizontalArrangement = Arrangement.Start,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             TypeOfMealChip()
-            Spacer(Modifier.size(12.dp))
             TimeToCookChip()
         }
-        Spacer(Modifier.size(24.dp))
         MealTitle()
-        Spacer(Modifier.size(12.dp))
         MealDescription()
     }
 }
 
 @Composable
 private fun MealTitle() {
-    Text(text = "Rustic Tuscan Tomato Basil Pasta")
+    Text(
+        text = "Rustic Tuscan Tomato Basil Pasta",
+        style = MaterialTheme.typography.headlineMedium,
+        color = Color.White,
+        maxLines = 2,
+    )
 }
 
 @Composable
 private fun MealDescription() {
-    Text(text = "A simple, soul-warming classic with fresh herbs.")
+    Text(
+        modifier = Modifier.alpha(0.8f),
+        text = "A simple, soul-warming classic with fresh herbs.",
+        style = MaterialTheme.typography.bodyMedium,
+        color = Color.White,
+        maxLines = 1,
+    )
 }
 
 @Composable
@@ -280,7 +323,9 @@ private fun CategoriesList(
 ) {
     Text(
         modifier = modifier,
-        text = "Categories"
+        text = "Categories",
+        style = MaterialTheme.typography.titleLarge,
+        color = Color(45, 43, 42),
     )
     Spacer(modifier = Modifier.size(20.dp))
     LazyRow(
@@ -318,7 +363,9 @@ private fun CategoryItem(
 
         Spacer(modifier = Modifier.size(14.dp))
 
-        Text(text = "Beef")
+        Text(
+            text = "Beef",
+        )
     }
 }
 
