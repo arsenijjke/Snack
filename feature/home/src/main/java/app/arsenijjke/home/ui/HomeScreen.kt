@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -87,7 +88,7 @@ internal fun HomeScreen(
                 )*/
                 HomeHeader(
                     modifier = Modifier.padding(horizontal = 24.dp),
-                    timeOfTheDay = "Good ${state.meal.username} evening",
+                    timeOfTheDay = "Good evening",
                     name = state.meal.username
                 )
 
@@ -105,7 +106,9 @@ internal fun HomeScreen(
                 TODO()
             }
 
-            HomeViewModel.MealUiState.Loading -> TODO()
+            HomeViewModel.MealUiState.Loading -> {
+                CircularProgressIndicator()
+            }
         }
 
     }
@@ -298,7 +301,7 @@ fun MealCardContent(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             TypeOfMealChip(typeOfMeal = state.meal.typeOfMeal)
-            TimeToCookChip(timeToCook = state.meal.id)
+            TimeToCookChip(timeToCook = state.meal.timeToCook)
         }
         MealTitle(name = state.meal.mealName)
         MealDescription(description = state.meal.description)
@@ -452,7 +455,8 @@ fun HomeScreenPreview() {
                 typeOfMeal = "",
                 isFavourite = false,
                 categories = emptyList(),
-                id = "123"
+                id = "123",
+                timeToCook = "30 min"
             )
         )
     )

@@ -2,7 +2,6 @@ package app.arsenijjke.home.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.arsenijjke.domain.model.Meal
 import app.arsenijjke.domain.usecase.GetRandomMealUseCase
 import app.arsenijjke.domain.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +21,7 @@ class HomeViewModel @Inject constructor(
     val state: StateFlow<MealUiState> = mealUiState()
         .stateIn(
             viewModelScope,
-            SharingStarted.WhileSubscribed(5_000),
+            SharingStarted.Lazily,
             MealUiState.Loading
         )
 
