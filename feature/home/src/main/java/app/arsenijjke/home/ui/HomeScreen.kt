@@ -1,4 +1,4 @@
-package app.arsenijjke.home
+package app.arsenijjke.home.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -50,6 +50,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import app.arsenijjke.home.R
+import app.arsenijjke.home.viewmodel.HomeViewModel
+import app.arsenijjke.home.viewmodel.MealUiModel
 
 @Composable
 fun HomeScreen(
@@ -58,14 +61,14 @@ fun HomeScreen(
 ) {
     val state: HomeViewModel.MealUiState by viewModel.state.collectAsStateWithLifecycle()
     HomeScreen(
-        //state = state
+        state = state
     )
 }
 
 @Composable
 internal fun HomeScreen(
     modifier: Modifier = Modifier,
-    //state: HomeViewModel.MealUiState,
+    state: HomeViewModel.MealUiState,
 ) {
 
     Column(
@@ -73,24 +76,38 @@ internal fun HomeScreen(
             .fillMaxSize()
             .padding(top = 48.dp)
     ) {
-        HomeHeader(
-            modifier = Modifier.padding(horizontal = 24.dp),
-            timeOfTheDay = "Good Evening",
-            name = "Arseny"
-        )
 
-        /*SimpleSearchBar(
+        when (state) {
+            is HomeViewModel.MealUiState.Success -> {
+                /*SimpleSearchBar(
             textFieldState = TextFieldState(initialText = "null"),
             onSearch = {},
             searchResults = emptyList(),
             modifier = Modifier.padding(horizontal = 24.dp)
-        )*/
+                )*/
+                HomeHeader(
+                    modifier = Modifier.padding(horizontal = 24.dp),
+                    timeOfTheDay = "Good ${state.meal.username} evening",
+                    name = state.meal.username
+                )
 
-        MealOfTheDay(modifier = Modifier.padding(horizontal = 24.dp))
+                MealOfTheDay(
+                    modifier = Modifier.padding(horizontal = 24.dp),
+                    state = state
+                )
 
-        Spacer(modifier = Modifier.size(44.dp))
+                Spacer(modifier = Modifier.size(44.dp))
 
-        CategoriesList(modifier = Modifier.padding(horizontal = 24.dp))
+                CategoriesList(modifier = Modifier.padding(horizontal = 24.dp))
+            }
+
+            HomeViewModel.MealUiState.Error -> {
+                TODO()
+            }
+
+            HomeViewModel.MealUiState.Loading -> TODO()
+        }
+
     }
 
 }
@@ -106,55 +123,42 @@ fun HomeHeader(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        TimeAndName(
-            modifier = Modifier.weight(1f),
-            timeOfTheDay = timeOfTheDay,
-            name = name
-        )
-        UserAvatar()
-    }
-}
+        Column(
+            modifier = Modifier,
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(
+                text = timeOfTheDay,
+                style = MaterialTheme.typography.bodySmall,
+                color = Color.Gray,
+            )
+            Text(
+                text = name,
+                style = MaterialTheme.typography.bodyLarge,
+            )
+        }
 
-@Composable
-private fun TimeAndName(
-    modifier: Modifier = Modifier,
-    timeOfTheDay: String,
-    name: String,
-) {
-    Column(
-        modifier = modifier
-    ) {
-        Text(
-            text = timeOfTheDay,
-            style = MaterialTheme.typography.bodySmall,
-            color = Color.Gray,
-        )
-        Text(
-            text = name,
-            style = MaterialTheme.typography.bodyLarge,
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .background(Color.Cyan)
         )
     }
-}
-
-@Composable
-private fun UserAvatar() {
-    Box(
-        modifier = Modifier
-            .size(40.dp)
-            .clip(CircleShape)
-            .background(Color.Cyan)
-    )
 }
 
 @Composable
 fun MealOfTheDay(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    state: HomeViewModel.MealUiState.Success
 ) {
     Column(
         modifier = modifier
     ) {
         MealHeader()
-        MealCard()
+        MealCard(
+            state = state
+        )
     }
 }
 
@@ -180,7 +184,8 @@ private fun MealHeader() {
 
 @Composable
 fun MealCard(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    state: HomeViewModel.MealUiState.Success
 ) {
     Card(
         modifier = modifier
@@ -217,7 +222,8 @@ fun MealCard(
                     .fillMaxHeight(0.5f)
                     .fillMaxWidth()
                     .align(Alignment.BottomStart)
-                    .padding(start = 24.dp, top = 24.dp)
+                    .padding(start = 24.dp, top = 24.dp),
+                state = state,
             )
 
         }
@@ -227,6 +233,7 @@ fun MealCard(
 @Composable
 fun TypeOfMealChip(
     modifier: Modifier = Modifier,
+    typeOfMeal: String
 ) {
     Box(
         modifier = modifier
@@ -236,7 +243,7 @@ fun TypeOfMealChip(
         Text(
             modifier = Modifier
                 .padding(horizontal = 10.dp, vertical = 6.dp),
-            text = "DINNER",
+            text = typeOfMeal,
             color = Color.White,
             fontSize = 10.sp,
             letterSpacing = 1.sp,
@@ -248,6 +255,7 @@ fun TypeOfMealChip(
 @Composable
 fun TimeToCookChip(
     modifier: Modifier = Modifier,
+    timeToCook: String
 ) {
     Box(
         modifier = modifier
@@ -269,7 +277,7 @@ fun TimeToCookChip(
                 modifier = Modifier
                     .padding(horizontal = 6.dp, vertical = 6.dp)
                     .alpha(0.9f),
-                text = "35 min",
+                text = timeToCook,
                 style = MaterialTheme.typography.labelMedium,
                 color = Color.White,
             )
@@ -279,7 +287,8 @@ fun TimeToCookChip(
 
 @Composable
 fun MealCardContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    state: HomeViewModel.MealUiState.Success,
 ) {
     Column(
         modifier = modifier.padding(end = 30.dp),
@@ -288,18 +297,20 @@ fun MealCardContent(
         Row(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            TypeOfMealChip()
-            TimeToCookChip()
+            TypeOfMealChip(typeOfMeal = state.meal.typeOfMeal)
+            TimeToCookChip(timeToCook = state.meal.id)
         }
-        MealTitle()
-        MealDescription()
+        MealTitle(name = state.meal.mealName)
+        MealDescription(description = state.meal.description)
     }
 }
 
 @Composable
-private fun MealTitle() {
+private fun MealTitle(
+    name: String
+) {
     Text(
-        text = "Rustic Tuscan Tomato Basil Pasta",
+        text = name,
         style = MaterialTheme.typography.headlineMedium,
         color = Color.White,
         maxLines = 2,
@@ -307,10 +318,12 @@ private fun MealTitle() {
 }
 
 @Composable
-private fun MealDescription() {
+private fun MealDescription(
+    description: String
+) {
     Text(
         modifier = Modifier.alpha(0.8f),
-        text = "A simple, soul-warming classic with fresh herbs.",
+        text = description,
         style = MaterialTheme.typography.bodyMedium,
         color = Color.White,
         maxLines = 1,
@@ -429,8 +442,19 @@ fun SimpleSearchBar(
 )
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(
 
+    HomeScreen(
+        state = HomeViewModel.MealUiState.Success(
+            meal = MealUiModel(
+                username = "",
+                mealName = "",
+                description = "",
+                typeOfMeal = "",
+                isFavourite = false,
+                categories = emptyList(),
+                id = "123"
+            )
+        )
     )
 }
 

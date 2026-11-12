@@ -1,4 +1,4 @@
-package app.arsenijjke.home
+package app.arsenijjke.home.viewmodel
 
 data class HomeState(
     val timeOfTheDay: String = "Evening",

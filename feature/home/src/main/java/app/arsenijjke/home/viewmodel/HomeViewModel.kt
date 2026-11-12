@@ -1,4 +1,4 @@
-package app.arsenijjke.home
+package app.arsenijjke.home.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -30,14 +30,16 @@ class HomeViewModel @Inject constructor(
         flow { emit(getRandomMealUseCase()) }
             .map { result ->
                 when (result) {
-                    is Result.Success -> MealUiState.Success(result.value)
+                    is Result.Success -> MealUiState.Success(
+                        result.value.toUiModel()
+                    )
                     is Result.Failure -> MealUiState.Error
                     is Result.Loading -> MealUiState.Loading
                 }
             }
 
     sealed interface MealUiState {
-        data class Success(val meal: Meal) : MealUiState
+        data class Success(val meal: MealUiModel) : MealUiState
         data object Error : MealUiState
         data object Loading : MealUiState
     }
