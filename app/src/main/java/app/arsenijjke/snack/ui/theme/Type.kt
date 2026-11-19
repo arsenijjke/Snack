@@ -70,8 +70,8 @@ val AppTypography = Typography(
     // Category item label
     labelSmall = TextStyle(
         fontFamily = DmSans,
-        fontWeight = FontWeight.Medium,
-        fontSize = 14.sp,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 13.sp,
     ),
     // Greeting ("Good Evening")
     bodySmall = TextStyle(
