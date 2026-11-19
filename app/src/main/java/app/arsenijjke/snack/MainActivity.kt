@@ -6,10 +6,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import app.arsenijjke.home.ui.HomeScreen
+import app.arsenijjke.home.ui.SimpleSearchBar
 import app.arsenijjke.home.viewmodel.HomeViewModel
 import app.arsenijjke.snack.ui.theme.SnackTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,6 +26,7 @@ class MainActivity : ComponentActivity() {
             SnackTheme {
                 Scaffold { innerPadding ->
                     val vm: HomeViewModel = hiltViewModel()
+
                     HomeScreen(
                         modifier = Modifier.padding(innerPadding),
                         viewModel = vm
