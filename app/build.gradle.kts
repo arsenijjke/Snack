@@ -64,6 +64,9 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging)
 
+    implementation(libs.coil.compose)
+    implementation(libs.coil3.coil.network.okhttp)
+
     implementation(libs.timber)
 
     implementation(libs.material)

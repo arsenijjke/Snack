@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,11 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import app.arsenijjke.home.R
 import app.arsenijjke.home.viewmodel.CategoryUIModel
+import coil3.compose.AsyncImage
 import kotlin.math.absoluteValue
 
 @Composable
@@ -57,7 +55,6 @@ private fun CategoryItem(
     name: String,
     imageUri: String,
 ) {
-    //TODO("Implement ImageLoader or smth")
 
     val backgroundColor = remember(name) { colorForKey(name) }
 
@@ -72,10 +69,10 @@ private fun CategoryItem(
                 .clip(RoundedCornerShape(20.dp))
                 .background(backgroundColor),
 
-        ) {
-            Icon(
+            ) {
+            AsyncImage(
                 modifier = Modifier.align(Alignment.Center),
-                painter = painterResource(id = R.drawable.baseline_favorite_border_24),
+                model = imageUri,
                 contentDescription = null,
             )
         }

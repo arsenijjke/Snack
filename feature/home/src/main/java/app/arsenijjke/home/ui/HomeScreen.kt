@@ -45,6 +45,7 @@ import app.arsenijjke.home.R
 import app.arsenijjke.home.viewmodel.CategoryUIModel
 import app.arsenijjke.home.viewmodel.HomeViewModel
 import app.arsenijjke.home.viewmodel.MealUiModel
+import coil3.compose.AsyncImage
 
 @Composable
 fun HomeScreen(
@@ -202,8 +203,8 @@ fun MealCard(
                 .fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.img),
+            AsyncImage(
+                model = state.meal.thumbnail,
                 contentScale = ContentScale.Crop,
                 contentDescription = null,
                 modifier = Modifier.matchParentSize()
@@ -355,6 +356,7 @@ fun HomeScreenPreview() {
                 description = "Kind of everything",
                 typeOfMeal = "Dinner",
                 isFavourite = false,
+                thumbnail = "",
                 categories = listOf(mockedCategory, mockedCategory),
                 id = "123",
                 timeToCook = "30 min",

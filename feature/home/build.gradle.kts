@@ -44,6 +44,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.material)
 
+    implementation(libs.coil.compose)
+    implementation(libs.coil3.coil.network.okhttp)
+
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 

@@ -12,6 +12,7 @@ data class MealUiModel(
     val description: String,
     val typeOfMeal: String,
     val categories: List<CategoryUIModel>,
+    val thumbnail: String,
     val timeToCook: String,
     val greeting: String,
     val isFavourite: Boolean = false,
@@ -33,6 +34,7 @@ fun Meal.toUiModel(
             .trim()
             .let { if (it.length < instructions.length) "$it..." else it },
         typeOfMeal = category,
+        thumbnail = this.thumbnail,
         categories = categories,
         timeToCook = timeToCook,
         greeting = greeting,
