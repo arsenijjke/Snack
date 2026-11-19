@@ -11,16 +11,18 @@ data class MealUiModel(
     val mealName: String,
     val description: String,
     val typeOfMeal: String,
-    val isFavourite: Boolean = false,
-    val categories: List<String>,
+    val categories: List<CategoryUIModel>,
     val timeToCook: String,
     val greeting: String,
+    val isFavourite: Boolean = false,
 )
 
 fun Meal.toUiModel(
+    greeting: String,
+    categories: List<CategoryUIModel> = emptyList(),
     username: String = "Username",
     isFavourite: Boolean = false,
-    greeting: String
+    timeToCook: String = randomCookTime(),
 ): MealUiModel {
     return MealUiModel(
         id = id,
@@ -31,10 +33,10 @@ fun Meal.toUiModel(
             .trim()
             .let { if (it.length < instructions.length) "$it..." else it },
         typeOfMeal = category,
-        isFavourite = isFavourite,
-        categories = tags,
-        timeToCook = randomCookTime(),
+        categories = categories,
+        timeToCook = timeToCook,
         greeting = greeting,
+        isFavourite = isFavourite,
     )
 }
 

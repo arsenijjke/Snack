@@ -1,8 +1,10 @@
 package app.arsenijjke.snack.di
 
 import app.arsenijjke.data.remote.api.MealApiService
+import app.arsenijjke.data.remote.repository.CategoriesRepositoryImpl
 import app.arsenijjke.data.remote.repository.MealRepositoryImpl
 import app.arsenijjke.data.util.IoDispatcher
+import app.arsenijjke.domain.repository.CategoriesRepository
 import app.arsenijjke.domain.repository.MealRepository
 import dagger.Binds
 import dagger.Module
@@ -27,6 +29,17 @@ object DomainProvideModule {
             ioDispatcher = ioDispatcher
         )
 
+    @Provides
+    @Singleton
+    fun provideCategoriesRepositoryImpl(
+        api: MealApiService,
+        @IoDispatcher ioDispatcher: CoroutineDispatcher
+    ): CategoriesRepositoryImpl =
+        CategoriesRepositoryImpl(
+            api = api,
+            ioDispatcher = ioDispatcher
+        )
+
 }
 
 @Module
@@ -34,4 +47,7 @@ object DomainProvideModule {
 interface DomainBindModule {
     @Binds
     fun bindMealRepository(repo: MealRepositoryImpl): MealRepository
+
+    @Binds
+    fun bindCategoriesRepository(repo: CategoriesRepositoryImpl): CategoriesRepository
 }
