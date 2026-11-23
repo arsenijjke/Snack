@@ -19,6 +19,10 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
+    tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+        jvmTarget = "11"
+    }
+
 }
 
 dependencies {
