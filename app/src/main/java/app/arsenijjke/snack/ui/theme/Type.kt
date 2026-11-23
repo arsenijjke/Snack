@@ -63,9 +63,10 @@ val AppTypography = Typography(
     // Chips ("DINNER", "35 min")
     labelMedium = TextStyle(
         fontFamily = DmSans,
-        fontWeight = FontWeight.Bold,
-        fontSize = 10.sp,
-        letterSpacing = 1.sp,
+        fontWeight = FontWeight.Medium,
+        fontSize = 12.sp,
+        letterSpacing = 0.sp,
+        lineHeight = 16.sp
     ),
     // Category item label
     labelSmall = TextStyle(

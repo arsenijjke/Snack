@@ -1,6 +1,5 @@
 package app.arsenijjke.home.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -46,6 +45,11 @@ import app.arsenijjke.home.viewmodel.CategoryUIModel
 import app.arsenijjke.home.viewmodel.HomeViewModel
 import app.arsenijjke.home.viewmodel.MealUiModel
 import coil3.compose.AsyncImage
+import dev.chrisbanes.haze.HazeInput
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.blur.HazeBlurStyle
+import dev.chrisbanes.haze.blur.HazeColorEffect
+import dev.chrisbanes.haze.blur.hazeBlur
 
 @Composable
 fun HomeScreen(
@@ -193,6 +197,7 @@ fun MealCard(
     modifier: Modifier = Modifier,
     state: HomeViewModel.MealUiState.Success
 ) {
+    val hazeState = remember { HazeState() }
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -214,8 +219,15 @@ fun MealCard(
             IconButton(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .padding(16.dp),
-                onClick = {}
+                    .background(Color(250, 250, 247, alpha = 20))
+                    .padding(16.dp)
+                    .hazeBlur(
+                        input = HazeInput.Backdrop(hazeState),
+                        style = HazeBlurStyle {
+                            blurRadius(20.dp)
+                        }
+                    ),
+                onClick = {},
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_favorite_border_24),
@@ -263,8 +275,18 @@ fun TimeToCookChip(
     modifier: Modifier = Modifier,
     timeToCook: String
 ) {
+    val hazeState = remember { HazeState() }
     Box(
         modifier = modifier
+            .hazeBlur(
+                input = HazeInput.Backdrop(hazeState),
+                style = HazeBlurStyle {
+                    backgroundColor(Color.Black.copy(alpha = 0.2f))
+                    colorEffects(
+                        listOf(HazeColorEffect.tint(Color.Black.copy(alpha = 0.2f)))
+                    )
+                }
+            )
             .clip(shape = RoundedCornerShape(20.dp))
             .background(Color.Black.copy(alpha = 0.2f)),
     ) {
@@ -352,7 +374,7 @@ fun HomeScreenPreview() {
         state = HomeViewModel.MealUiState.Success(
             meal = MealUiModel(
                 username = "UserName",
-                mealName = "BRand new meal",
+                mealName = "Brand new meal",
                 description = "Kind of everything",
                 typeOfMeal = "Dinner",
                 isFavourite = false,

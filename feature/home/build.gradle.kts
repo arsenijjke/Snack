@@ -46,6 +46,8 @@ dependencies {
 
     implementation(libs.coil.compose)
     implementation(libs.coil3.coil.network.okhttp)
+    implementation(libs.haze)
+    implementation(libs.haze.blur)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
