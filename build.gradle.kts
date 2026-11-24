@@ -1,4 +1,4 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+// Top-level build file where you can add configuration options common to all subprojects/modules.
 import io.gitlab.arturbosch.detekt.Detekt
 
 plugins {
@@ -15,5 +15,6 @@ subprojects {
     tasks.withType<Detekt>().configureEach {
         jvmTarget = "21"
         config.setFrom(rootProject.file("config/detekt/detekt.yml"))
+        buildUponDefaultConfig = true
     }
 }
